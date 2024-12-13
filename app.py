@@ -5,7 +5,6 @@ import pymysql
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
 
 # Railway MySQL Configuration
 app.config['MYSQL_HOST'] = 'mysql.railway.internal'  # Replace with Railway MySQL host
