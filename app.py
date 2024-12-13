@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-import MySQLdb
+import pymysql
+pymysql.install_as_MySQLdb()  
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
