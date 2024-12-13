@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-import pymysql
-pymysql.install_as_MySQLdb()  
+import MySQLdb
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -10,7 +9,7 @@ app.config['MYSQL_HOST'] = 'mysql.railway.internal'  # Replace with Railway MySQ
 app.config['MYSQL_USER'] = 'root'           # Replace with Railway MySQL username
 app.config['MYSQL_PASSWORD'] = 'gWglUMkwryIYoNnFyaFzKdPVXoAUDenH'       # Replace with Railway MySQL password
 app.config['MYSQL_DB'] = 'railway'             # Replace with Railway MySQL database name
-app.config['MYSQL_PORT'] = 3306                     # Replace with Railway MySQL port if different
+app.config['MYSQL_PORT'] = 3306                      # Replace with Railway MySQL port if different
 
 # Connect to the database
 mysql = MySQLdb.connect(
