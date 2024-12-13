@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, g
-import MySQLdb
-import MySQLdb.cursors
+import pymysql
+
+# Make pymysql work as MySQLdb (to avoid changes in the rest of the code)
+pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -16,15 +18,15 @@ def get_db():
     """Open a new database connection if one is not already open."""
     if 'db' not in g:
         try:
-            g.db = MySQLdb.connect(
+            g.db = pymysql.connect(
                 host=app.config['MYSQL_HOST'],
                 user=app.config['MYSQL_USER'],
                 passwd=app.config['MYSQL_PASSWORD'],
                 db=app.config['MYSQL_DB'],
                 port=app.config['MYSQL_PORT'],
-                cursorclass=MySQLdb.cursors.DictCursor  # Use dictionary cursor for easier data handling
+                cursorclass=pymysql.cursors.DictCursor  # Use dictionary cursor for easier data handling
             )
-        except MySQLdb.Error as e:
+        except pymysql.MySQLError as e:
             print(f"Error connecting to MySQL: {e}")
             flash("Database connection failed", 'error')
             return redirect(url_for('index'))
@@ -58,7 +60,7 @@ def add_user():
             cursor.execute(query, (name, email))
             db.commit()
             flash("User Added Successfully")
-        except MySQLdb.Error as e:
+        except pymysql.MySQLError as e:
             db.rollback()  # Rollback if any error occurs
             print(f"Error executing query: {e}")
             flash("Error adding user", 'error')
@@ -78,7 +80,7 @@ def update_user(id):
             cursor.execute(query, (name, email, id))
             db.commit()
             flash("User Updated Successfully")
-        except MySQLdb.Error as e:
+        except pymysql.MySQLError as e:
             db.rollback()
             print(f"Error executing query: {e}")
             flash("Error updating user", 'error')
@@ -100,7 +102,7 @@ def delete_user(id):
         cursor.execute(query, (id,))
         db.commit()
         flash("User Deleted Successfully")
-    except MySQLdb.Error as e:
+    except pymysql.MySQLError as e:
         db.rollback()
         print(f"Error executing query: {e}")
         flash("Error deleting user", 'error')
